@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Playfair+Display&display=swap" rel="stylesheet">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div id="startScreen" class="startScreen">
+        <span class="" id="gameResult">FLAGS QUIZ</span>
+        <div  id="startButton" onclick=startGame()>start game</div>
+    </div>
+    <div id="quiz" class="hide">
+        <div id="flags">
+            <img id="flag" alt="flag should be here">
+        </div>
+        <div id="answers">
+            <div id="ans1" class="answer">Albania</div>
+            <div id="ans2" class="answer">Polska</div>
+            <div id="ans3" class="answer">Rosja</div>
+            <div id="ans4" class="answer">Czechy</div>
+        </div>
+        <div id="barContainer">
+            <div id="progressBar"></div>
+        </div>
+    </div>
+    <footer id="flagsRow" class="flagsRow"></footer>
+</body>
+</html>
