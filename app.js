@@ -95,10 +95,10 @@ function createQuestion() {
     const gen = new NumsGenerator()
     wrongAnswers = [] // delete wrong answers from the pevious question
 
-    currentFlag = countriesList[gen._rightNum].flag
-    correctAnswer = countriesList[gen._rightNum].name
+    currentFlag = countriesList[gen._rightNum].flags.svg
+    correctAnswer = countriesList[gen._rightNum].name.common
     for (num of gen._wrongNums) {
-        wrongAnswers.push(countriesList[num].name)
+        wrongAnswers.push(countriesList[num].name.common)
     }
 
     answersAll = wrongAnswers.map(a=>a)
@@ -109,7 +109,7 @@ function createQuestion() {
 function initiateList() {
     return new Promise((resolve) => {
         let xhr = new XMLHttpRequest()
-        xhr.open("GET", "https://restcountries.eu/rest/v2/all", true)
+        xhr.open("GET", "https://restcountries.com/v3.1/all", true)
         xhr.onload = function() {
             if (xhr.status == 200) {
                 countriesList = JSON.parse(this.response)
@@ -166,7 +166,7 @@ function createFlagsRow () {
             const smallFlag = document.createElement("img")
             smallFlag.classList.add("smallFlag")
             smallFlag.src = "loading flag.jpg"
-            smallFlag.src = countriesList[rn].flag
+            smallFlag.src = countriesList[rn].flags.svg
             flagsRow.appendChild(smallFlag)
         }
         moveFlagsRow()
