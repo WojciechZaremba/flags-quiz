@@ -177,19 +177,23 @@ let move
 let margin = 0
 let marginMax = 0
 
+
+
 function moveFlagsRow () {
-    clearInterval(move)
     marginMax = flagsRow.firstElementChild.offsetWidth // .width causes bugs
-    move = setInterval( () => {
+    mv()
+
+    function mv() {
         flagsRow.style.marginLeft = `${margin}px`
-        margin -= .3333
+        margin -= .5
         if (margin < -marginMax-20) {
             flagsRow.appendChild(flagsRow.firstElementChild)
             margin = 0 
             flagsRow.style.marginLeft = `${margin}px`
             marginMax = flagsRow.firstElementChild.offsetWidth
         }
-    }, 10)
+        window.requestAnimationFrame(mv)
+    }
 }
 
 createFlagsRow()
