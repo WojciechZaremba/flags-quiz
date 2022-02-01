@@ -14,6 +14,12 @@ let wrongAnswers = []
 let answersAll = []
 let score = 0
 
+const gameOptions = {
+    gameMode: "normal",
+    region: "all",
+    difficulty: "normal"
+}
+
 class NumsGenerator { // one right and three wrong indexes of countries 
     constructor(a) {
         this._rightNum = Math.floor(Math.random()*countriesList.length)
@@ -39,7 +45,7 @@ class NumsGenerator { // one right and three wrong indexes of countries
 }
 
 function startGame() {
-    clearInterval(move)
+    stopFlagsBar = true
     flag.src = "loading flag.jpg"
     startScreen.classList.add("hide")
     // flagsRow.style.display = "none"
@@ -173,26 +179,25 @@ function createFlagsRow () {
     })
 }
 
-let move
+let stopFlagsBar = false
 let margin = 0
 let marginMax = 0
 
-
-
 function moveFlagsRow () {
+    stopFlagsBar = false
     marginMax = flagsRow.firstElementChild.offsetWidth // .width causes bugs
     mv()
 
     function mv() {
         flagsRow.style.marginLeft = `${margin}px`
-        margin -= .5
+        margin -= 1
         if (margin < -marginMax-20) {
             flagsRow.appendChild(flagsRow.firstElementChild)
             margin = 0 
             flagsRow.style.marginLeft = `${margin}px`
             marginMax = flagsRow.firstElementChild.offsetWidth
         }
-        window.requestAnimationFrame(mv)
+        if (!stopFlagsBar) window.requestAnimationFrame(mv)
     }
 }
 
