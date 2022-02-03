@@ -102,6 +102,8 @@ function gameOver(result) {
         resultElem.innerText = "you lose"
         startButton.style.backgroundColor = "#DA7F8F"
         startButton.style.color = "#560319"
+        learningButton.style.backgroundColor = "#DA7F8F"
+        learningButton.style.color = "#560319"
 
     }
 
