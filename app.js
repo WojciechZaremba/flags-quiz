@@ -37,6 +37,7 @@ let currentPathDepth = 0
 
 const gameOptions = {
     gameMode: "normal",
+    language: "pol",
     region: "all",
     difficulty: "normal"
 }
@@ -134,7 +135,8 @@ function createQuestion() {
     const gen = new NumsGenerator()
     wrongAnswers = [] // delete wrong answers from the pevious question
     for (num of gen._wrongNums) {
-        wrongAnswers.push(countriesList[num].name.common)
+        // wrongAnswers.push(countriesList[num].name.common)
+        wrongAnswers.push(countriesList[num].translations[gameOptions.language].common)
     }
     
     if (gameOptions.gameMode === "normal") {
@@ -153,7 +155,8 @@ function createQuestion() {
     }
 
     currentFlag = countriesList[correctAnsNum].flags.svg
-    correctAnswer = countriesList[correctAnsNum].name.common
+    // correctAnswer = countriesList[correctAnsNum].name.common
+    correctAnswer = countriesList[correctAnsNum].translations[gameOptions.language].common
     answersAll = wrongAnswers.map(a=>a)
     const inputHere = Math.floor(Math.random()*3)
     answersAll.splice(inputHere, 0, correctAnswer)
@@ -204,7 +207,9 @@ function handleAnswer(e) {
         answers.forEach(ans => ans.removeEventListener("click", handleAnswer)) // remove to avoid spamming
         if (score >= 10 && gameOptions.gameMode === "normal") {
             return setTimeout(()=>gameOver("win"), 1000) // finish game as a winner
-        } 
+        } else if (score > 10) {
+            score = 10
+        }
         setTimeout(startGame, 1000) // next round
     } else {
         score -= 3
