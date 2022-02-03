@@ -6,6 +6,24 @@ const progressBar = document.getElementById("progressBar")
 const flagsRow = document.getElementById("flagsRow")
 const resultElem = document.getElementById("gameResult")
 const startButton = document.querySelector("#startButton")
+const learningButton = document.querySelector("#learningButton")
+
+// const testUtils = {
+//     countriesList: [],
+//     currentFlag: "",
+//     correctAnswer: "",
+//     wrongAnswers: [],
+//     answersAll: [],
+//     score: 0,
+//     learningPath: []
+// }
+// let countriesList = testUtils.countriesList;
+// let currentFlag = testUtils.currentFlag
+// let correctAnswer = testUtils.correctAnswer
+// let wrongAnswers = testUtils.wrongAnswers
+// let answersAll = testUtils.answersAll
+// let score = testUtils.score
+// let learningPath = testUtils.learningPath
 
 let countriesList = [];
 let currentFlag = ""
@@ -13,6 +31,9 @@ let correctAnswer = ""
 let wrongAnswers = []
 let answersAll = []
 let score = 0
+let learningPath = []
+let currentPathDepth = 0
+
 
 const gameOptions = {
     gameMode: "normal",
@@ -44,18 +65,26 @@ class NumsGenerator { // one right and three wrong indexes of countries
     }
 }
 
-function startGame() {
+function startGame(mode) {
+    if (mode) gameOptions.gameMode = mode   
+    
+    // gameOptions.gameMode = mode
+    // console.log(typeof mode)
     stopFlagsBar = true
     flag.src = "loading flag.jpg"
     startScreen.classList.add("hide")
-    // flagsRow.style.display = "none"
+    //flagsRow.style.display = "none"
     flagsRow.classList.add("hide")
     quiz.classList.remove("hide")
     answers.forEach(ans => ans.classList.remove("wrong","correct"))
     answers.forEach(ans => ans.addEventListener("click", handleAnswer))
-    scramble()
+    //scramble()
+    if (!countriesList.length) {
+        initiateList()
+    } else {
+       createQuestion() 
+    }
     showQuestion()
-    console.log("game started")
 }
 
 function gameOver(result) {
@@ -65,6 +94,8 @@ function gameOver(result) {
         resultElem.innerText = "you win"
         startButton.style.backgroundColor = "lightgreen"
         startButton.style.color = "#004225"
+        learningButton.style.backgroundColor = "lightgreen"
+        learningButton.style.color = "#004225"
 
         resultElem.style.fontWeight = "bold"
     } else if (result === "lose") {
@@ -82,16 +113,16 @@ function gameOver(result) {
     progressBar.style.width = `${score}0%`
 }
 
-function scramble() {
-    if (!countriesList.length) {
-        initiateList()
-    } else {
-       createQuestion() 
-    }
-    console.log("scrambled")
-}
+// function scramble() {
+//     if (!countriesList.length) {
+//         initiateList()
+//     } else {
+//        createQuestion() 
+//     }
+// }
+
 function showQuestion() {
-    setTimeout(()=>{flag.src = currentFlag}, 0) // TESTING DELAY
+    setTimeout(()=>{flag.src = currentFlag}, 000) // TESTING DELAY
     for (let i = 0; i < answers.length; i++) {
         answers[i].innerHTML = answersAll[i]
     }
@@ -100,16 +131,49 @@ function showQuestion() {
 function createQuestion() {
     const gen = new NumsGenerator()
     wrongAnswers = [] // delete wrong answers from the pevious question
-
-    currentFlag = countriesList[gen._rightNum].flags.svg
-    correctAnswer = countriesList[gen._rightNum].name.common
     for (num of gen._wrongNums) {
         wrongAnswers.push(countriesList[num].name.common)
     }
+    
+    if (gameOptions.gameMode === "normal") {
+        correctAnsNum = currentPathDepth = gen._rightNum
+    } else if (gameOptions.gameMode === "learning") {
+        // if (learningPath.length > 0) {
+        //     currentPathDepth++
+        //     // correctAnsNum = currentPathDepth
+        // } else {
+        //     createLearPath()
+        // }
+        if (learningPath.length === 0) {
+            createLearPath()
+        }
+        correctAnsNum = learningPath[currentPathDepth]
+    }
 
+    currentFlag = countriesList[correctAnsNum].flags.svg
+    correctAnswer = countriesList[correctAnsNum].name.common
     answersAll = wrongAnswers.map(a=>a)
     const inputHere = Math.floor(Math.random()*3)
     answersAll.splice(inputHere, 0, correctAnswer)
+
+}
+
+function createLearPath() {
+    if (countriesList.length) {
+        let currentIndex = countriesList.length, randomIndex
+        for (let i = 0; i < countriesList.length; i++) {
+            learningPath.push(i)
+        }
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex)
+            currentIndex--
+            [learningPath[currentIndex], 
+            learningPath[randomIndex]] 
+            = 
+            [learningPath[randomIndex], 
+            learningPath[currentIndex]]
+        }
+    }
 }
 
 function initiateList() {
@@ -120,23 +184,23 @@ function initiateList() {
             if (xhr.status == 200) {
                 countriesList = JSON.parse(this.response)
                 resolve()
-                createQuestion()
-                showQuestion()
+                //createQuestion() //don't need that
+                //showQuestion()
             }
         }
         xhr.send()
         console.log("flags downloaded")
     })
-        
 }
 
 function handleAnswer(e) {
     const answer = e.target.innerText
+    if (gameOptions.gameMode === "learning") currentPathDepth++
     if (answer === correctAnswer) {
         score++
         giveFeedback() // add style to the answers and update the prog bar
         answers.forEach(ans => ans.removeEventListener("click", handleAnswer)) // remove to avoid spamming
-        if (score >= 10) {
+        if (score >= 10 && gameOptions.gameMode === "normal") {
             return setTimeout(()=>gameOver("win"), 1000) // finish game as a winner
         } 
         setTimeout(startGame, 1000) // next round
@@ -145,7 +209,9 @@ function handleAnswer(e) {
         giveFeedback(answer)
         answers.forEach(ans => ans.removeEventListener("click", handleAnswer))
         if (score <= 0) {
-            setTimeout(()=>gameOver("lose"), 2000) // finish game as a loser
+            // if (gameOptions.gameMode === "learning") currentPathDepth = 0
+            currentPathDepth = 0
+            setTimeout(()=>gameOver("lose"), 1300) // finish game as a loser
         }
         else {
             setTimeout(startGame, 1000) // next round
