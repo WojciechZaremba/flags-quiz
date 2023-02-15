@@ -15,26 +15,33 @@ body, html {
 }
 
 #quiz {
-    margin: auto;
-    height: 80vh;
-    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    top: 10vh;
+    height: 50vh;
+    width: 50%;
     background-color: #FAF3F3;
 }
 
 #flags {
     background-color: #FAF3F3;
-    margin: 40px;
+    margin: 0px;
     margin-top: 100px;
-    padding: 10px;
 }
 
 #flag {
     display: block;
-    margin: 0 auto;
-    width: auto;
+    position: relative;
+    /* width: auto; */
+    left: 50%;
+    margin-bottom: 10%;
+    transform: translateX(-50%);
     max-height: 300px;
     min-height: 300px;
-    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.6)
+    box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.6);
 }
 
 #answers {
@@ -72,7 +79,7 @@ body, html {
     margin-left: -350px;
     background-color: #FAF3F3CC;
     /* box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.6); */
-    /* border: solid black 1px */
+    border: solid black 1px
 }
 
 .startScreen > span {
@@ -82,9 +89,10 @@ body, html {
     margin-top: -350px;
 }
 
-.startScreen > div {
+/* .startScreen > div {
     min-width: 118px;
-}
+    border: black 1px solid;
+} */
 
 .thirdDimension {
     color: white;
@@ -112,6 +120,9 @@ body, html {
 }
 
 .startScreen > div {
+    margin: 1vh;
+    min-width: 118px;
+    border: black 1px solid;
     padding: 15px 40px 18px 40px;
     /* border: solid black 1px; */
     font-family: 'EB Garamond', serif;
@@ -168,7 +179,14 @@ body, html {
 .hide {
     display: none
 }
-
+@media screen and (max-height: 777px) {
+    #quiz {
+        top: 0vh;
+    }
+    #flags {
+        margin-top: 8vh;
+    }
+}
 
 @media screen and (max-width: 777px) {
     body,html {
@@ -229,7 +247,7 @@ body, html {
         /* border: solid black 1px; */
     }
     .startScreen > div {
-        margin: 0px;
+        margin: 1vh;
     }
     .wrong {
         background-color: palevioletred;
