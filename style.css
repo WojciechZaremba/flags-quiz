@@ -122,9 +122,8 @@ body, html {
 .startScreen > div {
     margin: 1vh;
     min-width: 118px;
-    border: black 1px solid;
+    /* border: black 1px solid; */
     padding: 15px 40px 18px 40px;
-    /* border: solid black 1px; */
     font-family: 'EB Garamond', serif;
     font-size: 30px;
     box-shadow: 3px 3px 12px 0px rgba(0,0,0,0.6);
